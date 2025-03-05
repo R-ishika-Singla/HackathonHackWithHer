@@ -1,0 +1,80 @@
+body {
+    font-family: 'Times New Roman', Times, serif, sans-serif;
+    background: linear-gradient(to right, #f5e6e8, #f7f7f7);
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    background: #068488;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
+
+.search-container {
+    text-align: center;
+    margin: 20px;
+}
+
+#search {
+    padding: 10px;
+    width: 70%;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.community-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    padding: 20px;
+}
+
+.community-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Full width */
+    max-width: 800px; /* Maximum width for larger screens */
+    margin: 10px auto; /* Center the card with margin */
+    text-align: center;
+}
+.view-chat {
+    background: #068488;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.featured-communities {
+    padding: 20px;
+    max-width: 600px;
+    margin: auto;
+}
+
+.chat-group {
+    background: white;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.new-community {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #068488;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+}
