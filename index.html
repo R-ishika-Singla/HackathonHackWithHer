@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Chat</title>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <style>
+        body {
+            display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    size: 70px;
+            background-color: #beecee;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+
+        h1 {
+            font-size: 40px;
+            font-weight: bold;
+            margin-top: 20px;
+           
+            color: #4A4A4A;
+            align-items: center;
+        }
+
+        #chat-container {
+            width: 80%;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        #chat-box {
+            width: 100%;
+            height: 700px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            background-image: url("https://i.pinimg.com/736x/1c/e6/73/1ce6731a10fb3863fa423b3615b58cdb.jpg");
+            background-repeat: no-repeat;
+            /* background-image: url("data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBw8NDxANDQ0NDQ0NDw8NDQ0NDQ8NDQ0NFREWFhURFRUYHSggGBolGxUVITEhJSkrLi4uFx8zODMsNygtLisBCgoKDQ0NFQ8NFSsZFRkrKystLTc3LSstLS0rLSstLTctKy0rKystNzctKy0rKysrKysrKystKysrKysrKysrLf/AABEIALwBDAMBIgACEQEDEQH/xAAXAAEBAQEAAAAAAAAAAAAAAAABAAIH/8QAHBABAQEBAQEAAwAAAAAAAAAAAAERAjFBIVGx/8QAGAEBAQEBAQAAAAAAAAAAAAAAAAECBAP/xAAXEQEBAQEAAAAAAAAAAAAAAAAAARFB/9oADAMBAAIRAxEAPwDsdUXSjhe4ipisAdVRdDlOjQVCjWhJBsxgtajUIiixCKqKaJaBEVpRKKEaQA6UNZ1KKValECEgVo1VIpi0SpdGlKxKZTQ1RIECAFRCBoVAGJJBqU1iN8tQaQtEqo1Wa0AFEVCK2zWmVqNRBcgazToSgSSCpCoqQQIgaBSINUKjVQwVQaKUhEEDUgolECaZKhlQQExk6okoAaogQEiLQSTNQKCAhIEEkDREgKgSjSqoBVQigov2oANSqgEFACogKQUSqVQMSAGwGgFDQAOijVoFLUgCEARFFUIkIJJCGg0AUKVDAWaBpUQGQ4IViCT+pIVAhBJIEiviiFWi1NFVQkAihUkgBSEQKFSSoJBA10jQqCtAgvjLVjJQlRAYREsQX00UipVRUAiqCFSoCCkMiiUVFSBBJUAUCCSQiQhFQIBustVlUJkXJUFZa6ZiUaMB5UUIhEQpVUUZb5YiUISRRpoqoFmmClIokoiqhrAARAJJAQQCIQGhJBustUNIYRylBQbVUCeWWlDFGWhBCIVFGYlEUgoGaK1YMQVCoQJgMULDYsKBIIqKUBKogAaoASSDbLQaQ8mqFUYkOI8ijTBhgIpKgIUAVQ3wRlUkgMFMFUZqhDKqFJUIpQM0FIqWGKiAgkBUqBUkkGxDRGkPJEPSiUSEShUUQKARCGRBfFIL41PAAKgoWpAqKaKgKYkBSQMpFAREClJKiZISqkkg30IeoZG8Qc+npckQFRRRKJQBSKoCpgqqCvi5MHK9FQaqiikEF0GqyUQqVQVpFIMw0EEsKgDEaAFBURUDVgN0jpRtkxLlAIYhAShk8QCqGoFF1PwYOvAMGGCgCIYgMVIBUHpCsqlIBVVAsOJQglElFWa0OkooolAITUgP/9k="); */
+             /* Semi-transparent background for better contrast */
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            color: #ddd;
+            font-size: 14px;
+            display: flex;
+            border-radius: 5%;
+            flex-direction: column-reverse; /* To show latest messages at the bottom */
+        }
+
+        .message {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .message .user {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .message-text {
+            padding: 15px;
+            border-radius: 20px;
+            max-width: 85%;
+            font-size: 20px;
+        }
+
+        /* Sender's message (right-aligned) */
+        .message-sender {
+            justify-content: flex-end; /* Align to the right */
+        }
+
+        .message-sender .message-text {
+            background-color: #1aa1a5; /* Light blue background */
+            color: black;
+        }
+
+        /* Other person's message (left-aligned) */
+        .message-other {
+            justify-content: flex-start; /* Align to the left */
+        }
+
+        .message-other .message-text {
+            background-color: #D1CFE2; /* Darker background */
+            color: white;
+        }
+
+        #message-input {
+            width: 75%;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #444;
+            background: white;
+            color: rgb(31, 30, 30);
+        }
+
+        #send-btn {
+            width: 20%;
+            padding: 10px;
+            background: #089da1;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+
+        #send-btn:hover {
+            background: #4fa3d1;
+        }
+
+        @media (max-width: 768px) {
+            #message-input {
+                width: 70%;
+            }
+
+            #send-btn {
+                width: 25%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Community Chat</h1>
+
+    <div id="chat-container">
+        <div id="chat-box"></div>
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <input type="text" id="message-input" placeholder="Type a message...">
+            <button id="send-btn">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const socket = io("http://localhost:4004");
+
+        let username = "Anonymous";
+
+        socket.on("username", (name) => {
+            username = name;
+        });
+
+        socket.on("message", (data) => {
+            const chatBox = document.getElementById("chat-box");
+            const messageDiv = document.createElement("div");
+            messageDiv.classList.add("message");
+
+            const userSpan = document.createElement("span");
+            userSpan.classList.add("user");
+            userSpan.textContent = data.user;
+
+            const messageText = document.createElement("span");
+            messageText.classList.add("message-text");
+            messageText.textContent = data.message;
+
+            if (data.user === username) {
+                messageDiv.classList.add("message-sender");
+            } else {
+                messageDiv.classList.add("message-other");
+            }
+
+            messageDiv.appendChild(userSpan);
+            messageDiv.appendChild(messageText);
+
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        });
+
+        document.getElementById("send-btn").addEventListener("click", () => {
+            const message = document.getElementById("message-input").value;
+            if (message.trim()) {
+                socket.emit("message", { user: username, message });
+                document.getElementById("message-input").value = "";
+            }
+        });
+    </script>
+
+</body>
+</html>
